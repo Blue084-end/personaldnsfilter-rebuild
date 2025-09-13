@@ -1,16 +1,28 @@
-package dnsfilter.remote;
+package dnsfilter;
 
-import android.util.Log;
-import dnsfilter.ConfigUtil;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-public class RemoteAccessClient {
-    public void connectToServer(String ip, int port) {
-        if (!ConfigUtil.isRemoteAccessEnabled()) {
-            Log.i("RemoteAccess", "Remote access client is disabled.");
-            return;
-        }
+public class ConfigUtil {
+    private static SharedPreferences prefs;
 
-        // Tiếp tục kết nối nếu được phép
-        // ... phần xử lý kết nối
+    public static void init(Context context) {
+        prefs = context.getSharedPreferences("dnsfilter_config", Context.MODE_PRIVATE);
+    }
+
+    public static boolean getBoolean(String key, boolean defaultValue) {
+        return prefs.getBoolean(key, defaultValue);
+    }
+
+    public static void setBoolean(String key, boolean value) {
+        prefs.edit().putBoolean(key, value).apply();
+    }
+
+    public static boolean isUpdateCheckEnabled() {
+        return getBoolean("update_check_enabled", false); // mặc định là false
+    }
+
+    public static boolean isRemoteAccessEnabled() {
+        return getBoolean("remote_access_enabled", false); // mặc định là false
     }
 }
