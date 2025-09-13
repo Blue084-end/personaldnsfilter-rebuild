@@ -2,24 +2,25 @@ package dnsfilter.monitor;
 
 import dnsfilter.firewall.FirewallPolicyManager;
 import dnsfilter.DNSResolver;
-import dnsfilter.log.QueryLogger;
+import dnsfilter.stats.DNSStatsManager;
 
 public class RealTimeDNSInterceptor {
     private final FirewallPolicyManager firewallManager;
     private final DNSResolver resolver;
-    private final QueryLogger logger;
+    private final DNSStatsManager statsManager;
 
-    public RealTimeDNSInterceptor(FirewallPolicyManager firewallManager, DNSResolver resolver, QueryLogger logger) {
+    public RealTimeDNSInterceptor(FirewallPolicyManager firewallManager, DNSResolver resolver, DNSStatsManager statsManager) {
         this.firewallManager = firewallManager;
         this.resolver = resolver;
-        this.logger = logger;
+        this.statsManager = statsManager;
     }
 
     public void intercept(String domain, String ip, int port) {
-        logger.log(domain, ip, port); // lưu lại truy vấn
+        boolean allowed = firewallManager.isAllowed(ip, domain, port);
+        statsManager.log(domain, ip, port, allowed);
 
-        if (!firewallManager.isAllowed(ip, domain, port)) {
-            resolver.blockQuery(domain); // chặn truy vấn nếu không nằm trong whitelist
+        if (!allowed) {
+            resolver.blockQuery(domain);
         }
     }
 }
