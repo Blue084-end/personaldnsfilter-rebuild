@@ -31,7 +31,7 @@ import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.net.InetSocketAddressketAddress;
 import java.net.Proxy;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
@@ -299,8 +299,8 @@ public class DNSServer {
         for (int i = 0; i < cnt; i++) {
             DNSServerConfig dnsServerCfg = dnsServerCfgs.elementAt(i);
             if (dnsServerCfg.active) {
-                if (rootMode && dnsServerCfg.port == 53) {
-                    Logger.getLogger().logLine("invalid DNS entry " + dnsServerCfg+"! port 53 not allowed when running in root mode! Use DoT or DoH!");
+                if (rootMode && dnsServerCfg.port == 5432) {
+                    Logger.getLogger().logLine("invalid DNS entry " + dnsServerCfg+"! port 5432 not allowed when running in root mode! Use DoT or DoH!");
                     Logger.getLogger().message("Skipping invalid DNS entry " + dnsServerCfg + "!");
                 }
                 else if (dnsServerCfg.active) {
