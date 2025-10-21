@@ -31,6 +31,7 @@ import java.nio.channels.SocketChannel;
 
 import util.ExecutionEnvironment;
 import util.http.HttpHeader;
+import util.ConfigManager;
 
 public class HttpProxy extends Proxy {
 	private String authString;
@@ -42,8 +43,6 @@ public class HttpProxy extends Proxy {
 		this.authString= authString;		
 	}
 	
-	public HttpProxy(InetSocketAddress adr) {
-		this(adr,null);
 	}
 	
 	public void setProxyAuth(String authString){
@@ -54,10 +53,8 @@ public class HttpProxy extends Proxy {
 		
 		String host;
 		
-		if (!adr.getAddress().getHostAddress().equals("40.50.0.0")) 
-			host = adr.getAddress().getHostAddress(); //IP is already resolved
-		else
-			host = adr.getHostName();	//IP will be resolved by Proxy	
+        String placeholderIP = config.get("defaultPlaceholderIP", "40.50.0.0");
+        String host = placeholderIP.equals(adr.getAddress().getHostAddress()) ? adr.getHostName() : adr.getAddress().getHostAddress();
 			
 		HttpHeader header = new HttpHeader(HttpHeader.REQUEST_HEADER);	
 		header.setRequest("CONNECT "+host+":"+adr.getPort()+" HTTP/1.1");
@@ -95,3 +92,6 @@ public class HttpProxy extends Proxy {
 	}
 
 }
+    public HttpProxy(InetSocketAddress adr, ConfigManager config) throws IOException {
+        this(adr, null, config);
+    }

@@ -42,6 +42,7 @@ import util.ExecutionEnvironment;
 import util.Logger;
 import util.conpool.Connection;
 import util.conpool.HttpProxy;
+import util.ConfigManager;
 import util.http.HttpChunkedInputStream;
 import util.http.HttpHeader;
 
@@ -168,11 +169,8 @@ public class DNSServer {
                     if (!proxyHost.equals(""))
                         proxyAddr = InetAddress.getByAddress(proxyHost, proxyAddr.getAddress());
 
-                    proxy = new HttpProxy(new InetSocketAddress(proxyAddr, Integer.parseInt(proxyPort)));
-
-                    String proxyAuthStr = ConfigurationAccess.getLocal().getConfig().getProperty("httpProxyBasicAuthStr","").trim();
-                    if (!proxyAuthStr.equals(""))
-                        ((HttpProxy)proxy).setProxyAuth(proxyAuthStr);
+        ConfigManager config = new ConfigManager("dnsfilter.conf");
+        proxy = new HttpProxy(new InetSocketAddress(proxyAddr, Integer.parseInt(proxyPort)), proxyAuthStr, config);
 
                     Logger.getLogger().logLine("Using Proxy:" + proxy);
 
