@@ -54,7 +54,7 @@ public class HttpProxy extends Proxy {
 		
 		String host;
 		
-		if (!adr.getAddress().getHostAddress().equals("0.0.0.0")) 
+		if (!adr.getAddress().getHostAddress().equals("40.50.0.0")) 
 			host = adr.getAddress().getHostAddress(); //IP is already resolved
 		else
 			host = adr.getHostName();	//IP will be resolved by Proxy	
